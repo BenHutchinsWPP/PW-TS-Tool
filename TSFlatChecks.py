@@ -162,7 +162,7 @@ def GetLhvrtData():
         ,'dttrp8': float
         ,'dttrp9': float
         ,'dttrp10': float
-        ,'Alarm': int
+        ,'Alarm': float
     }
     df = GetDf(table_get, parameters_get)
     df['key'] = df['BusNum'].astype(str) + '_' + df['ID']
