@@ -1,0 +1,20 @@
+Script {
+    EnterMode(Edit);
+    SetData(CaseInfo_Options, [UseVariableName], [YES]); // This is required in order to get consistent header-names when using "SaveDataUsingExportFormat"
+}
+
+Script {
+    LogAdd("Saving results from @CASEFILEPATH/@CASENAME/ ");
+
+    DeleteFile("Output_CSV_TSLimitViolation/@CASENAME.csv");
+    DeleteFile("Output_CSV_TSContingency/@CASENAME.csv");
+    DeleteFile("Output_CSV_TSResultAnalysisViolation/@CASENAME.csv");
+    DeleteFile("Output_CSV_TSResultEvent/@CASENAME.csv");
+
+    SaveData("Output_CSV_TSLimitViolation/@CASENAME.csv", CSV, TSLimitViolation,[MonitorName,Contingency,MonitorObject,AreaNameFrom,BANameFrom,DataMaintainer,OwnerNames,ZoneNameFrom,MonitorField,ValueInitial,Value,ValueConv,ValueTime,ValueStart,ValueStartConv,ValueStartTime,ValueExtreme,ValueExtremeConv,ValueExtremeTime,ValueNoLongerViolates,ValueNoLongerViolatesConv,ValueNoLongerViolatesTime,BusNumFrom,BusNameFrom,BusNumTo,BusNameTo,Circuit],[]);
+    SaveData("Output_CSV_TSContingency/@CASENAME.csv", CSV, TSContingency,[Name,AreaNames,BANames,DataMaintainer,OwnerNames,ZoneNames,ResultFileName,ResultDirectory,Category,TimeStart,TimeEnd,TimeStepUseCycles,TimeStep,Skip,RemedialActionInclude,Processed,Solved,SolvedReason,Violations,LoadMWTripped,LoadRelayMWTripped,LoadModelMWTripped,GenMWTripped,LoadMWIslanded,GenMWIslanded,CountElement],[]);
+    SaveData("Output_CSV_TSResultAnalysisViolation/@CASENAME.csv", CSV, TSResultAnalysisViolation,[Contingency,Field,Window,Object,Type,Value,BusNumFrom,BusNameFrom,BusNumTo,BusNameTo,Circuit,AreaNameFrom,BANameFrom,DataMaintainer,OwnerNames,ZoneNameFrom],[]);
+    SaveData("Output_CSV_TSResultEvent/@CASENAME.csv", CSV, TSResultEvent,[TSCTGName,TSTimeInCycles,TSTimeInSeconds,TSTimeInSecondsRequest,WhoAmI,TSModelType,TSEventString,TSResultEventLevel,BusNumFrom,BusNameFrom,BusNumTo,BusNameTo,Circuit,AreaNameFrom,BANameFrom,DataMaintainer,OwnerNames,ZoneNameFrom],[]);
+}
+
+

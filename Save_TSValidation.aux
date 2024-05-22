@@ -1,0 +1,14 @@
+Script {
+    EnterMode(EDIT);
+    SetData(CaseInfo_Options, [UseVariableName], [YES]); // This is required in order to get consistent header-names when using "SaveDataUsingExportFormat"
+}
+
+Script {
+    LogAdd("Saving TSValidation from @CASEFILEPATH/@CASENAME/ ");
+
+    EnterMode(RUN);
+    TSValidate; // This command doesn't appear to populate the TSValidation table until the GUI is invoked!
+
+    DeleteFile("Output_CSV_TSValidation/@CASENAME.csv");
+    SaveData("Output_CSV_TSValidation/@CASENAME.csv", CSV, TSValidation,[ModelTypeGeneral,ModelType,ObjectType,ModelStatus,ObjectIdentifier,Message],[]);
+}

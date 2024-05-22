@@ -1,0 +1,16 @@
+
+*.pwb
+*.pwd
+*.sav
+*.log
+*.tsr
+*.pdf
+
+!TS9Bus.pwb
+TS9Bus/*
+
+!TS9Bus.pwd
+
+Output*/
+_Results/
+_Archive/

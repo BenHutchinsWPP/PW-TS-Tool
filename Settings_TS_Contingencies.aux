@@ -1,0 +1,29 @@
+
+Script {
+   EnterMode(EDIT);
+}
+
+// N-0, P0, Steady State
+Contingency (Name,Category,Skip,RemedialActionInclude,ScreenAllow,NormalRatingNoAction,Memo,
+   PostCTGAuxFile,SolutionOptionsUse,SolutionOptionsUseSpecific,
+   MonitorExceptionsUse,SolutionOptions,DataMaintainerAssign)
+{
+"P0: Base Case Violations" "P0" "NO " "YES" "NO " "YES" "" "none" "NO " "YES" "Use" "" ""
+}
+Contingency (Category,Name)
+{
+"P0" "P0: Base Case Violations"
+}
+
+// N-0, P0
+TSContingency (Name,ResultFileName,ResultDirectory,Category,TimeStart,TimeEnd,TimeStepUseCycles,
+   TimeStep,Skip,RemedialActionInclude,Processed,Solved,SolvedReason,Violations,
+   LoadMWTripped,LoadRelayMWTripped,LoadModelMWTripped,GenMWTripped,
+   LoadMWIslanded,GenMWIslanded,CountElement)
+{
+"P0: Flat Run - No Disturbances" "" "" "P0,N-0" 0.000000 10.000000 "YES" 0.250000 "NO" "YES" "YES" "YES" "" 0   0.0000   0.0000   0.0000   0.0000   0.0000   0.0000 0
+}
+
+Script {
+   EnterMode(RUN);
+}

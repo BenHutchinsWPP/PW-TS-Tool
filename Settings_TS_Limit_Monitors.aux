@@ -1,0 +1,62 @@
+
+Script {
+   EnterMode(EDIT);
+}
+
+//--------------------------------------------------------------------------------
+// THE FOLLOWING ARE THE TRANSIENT LIMIT MONITORING
+//--------------------------------------------------------------------------------
+Filter (ObjectType,Name,Logic,LogicNumTrue,FilterPre,Enabled,DataMaintainerAssign)
+{
+"Bus" "Bus NominalkV 100-499 kV" "AND" 1 "NO " "YES" ""
+"Bus" "Bus NominalkV > 499" "AND" 1 "NO " "YES" ""
+}
+Condition (ObjectType,Filter,CondNum,ObjectField,ConditionType,Value,OtherValue,Absolute)
+{
+"Bus" "Bus NominalkV 100-499 kV" 1 "NomkV" ">" "100" "" "NO "
+"Bus" "Bus NominalkV 100-499 kV" 2 "NomkV" "<" "499" "" "NO "
+"Bus" "Bus NominalkV > 499" 1 "NomkV" ">" "499" "" "NO "
+}
+TSLimitMonitor (Name,LogicVariable,Active,CategoryList,Abort,AbortTime,MaxViolStore,SeveritySort,
+   ObjectType,Field,Filter,LimitValue,LimitDuration,LimitSide,LimitValueType,
+   LimitValueAbs,CumulativeTime,StopValueBelowUse,StopValueBelow,
+   StartValueBelowUse,StartValueBelow,StopValueAboveUse,StopValueAbove,
+   StartValueAboveUse,StartValueAbove,MonitorStart,MonitorStartLastEventTime,
+   MonitorStartTime,MonitorStop,MonitorStopDuration,MonitorStopTime,
+   DataMaintainerAssign)
+{
+"WECC 2016 Fault WR1 1.3 (Vpu < 80%, 20s)" "" "YES" "" "Log" 0 100 "ValueTime" "Bus" "TSVpu" "Load Only" 80 20 "Lower" "Percent" "NO " "NO " "NO " 0 "NO " 0 "NO " 0 "NO " 0 "Default to Global Option" 0 0 "Never" 0 0 ""
+"WECC 2016 Fault WR1 1.4 Part 1 (Vpu < 70%, 0.5s)" "" "YES" "" "Log" 0 100 "ValueTime" "Bus" "TSVpu" "Load Only" 70 0.5 "Lower" "Percent" "NO " "NO " "NO " 0 "NO " 0 "NO " 0 "YES" 80 "Default to Global Option" 0 0 "Never" 0 0 ""
+"WECC 2016 Fault WR1 1.4 Part 2 (Vpu < 80%, 2s)" "" "YES" "" "Log" 0 100 "ValueTime" "Bus" "TSVpu" "Load Only" 80 2 "Lower" "Percent" "NO " "NO " "NO " 0 "NO " 0 "NO " 0 "YES" 80 "Default to Global Option" 0 0 "Never" 0 0 ""
+"WECC 2016 No Fault WR1 1.5 Part 1 (Vpu < 70%, 0.5s)" "" "YES" "N-0,P0" "Log" 0 100 "ValueTime" "Bus" "TSVpu" "Load Only" 70 0.5 "Lower" "Percent" "NO " "NO " "NO " 0 "NO " 0 "NO " 0 "NO " 0 "Default to Global Option" 0 0 "Never" 0 0 ""
+"WECC 2016 No Fault WR1 1.5 Part 2 (Vpu < 80%, 2s)" "" "YES" "N-0,P0" "Log" 0 100 "ValueTime" "Bus" "TSVpu" "Load Only" 80 2 "Lower" "Percent" "NO " "NO " "NO " 0 "NO " 0 "NO " 0 "NO " 0 "Default to Global Option" 0 0 "Never" 0 0 ""
+"Gen Angle > 360" "" "YES" "" "Log" 0 100 "ValueTime" "Gen" "TSRotorAngle" "" 360 0 "Upper" "Actual Deviation" "YES" "NO " "NO " 0 "NO " 0 "NO " 0 "NO " 0 "Immediately" 0 0 "Never" 0 0 ""
+"t>8, Bus < 0.8PU" "" "YES" "" "Log" 0 500 "ValueTime" "Bus" "TSVpu" "" 0.8 0 "Lower" "Actual" "NO " "NO " "NO " 0 "NO " 0 "NO " 0 "NO " 0 "Custom Time" 0 8 "Never" 0 0 ""
+"t>8, 100-499kV < 0.8PU" "" "YES" "" "Log" 0 500 "ValueTime" "Bus" "TSVpu" "Bus NominalkV 100-499 kV" 0.8 0 "Lower" "Actual" "NO " "NO " "NO " 0 "NO " 0 "NO " 0 "NO " 0 "Custom Time" 0 8 "Never" 0 0 ""
+"t>8, 525kV < 0.8PU" "" "YES" "" "Log" 0 100 "ValueTime" "Bus" "TSVpu" "Bus NominalkV > 499" 0.84 0 "Lower" "Actual" "NO " "NO " "NO " 0 "NO " 0 "NO " 0 "NO " 0 "Custom Time" 0 8 "Never" 0 0 ""
+"P0: Bus Vpu Deviation > 0.01" "" "YES" "N-0,P0" "Log" 0 100 "ValueTime" "Bus" "TSVpu" "" 0.01 0 "Upper" "Actual Deviation" "NO " "NO " "NO " 0 "NO " 0 "NO " 0 "NO " 0 "Default to Global Option" 0 0 "Never" 0 0 ""
+"P0: Gen Angle Deviation > 3 Degrees" "" "YES" "N-0,P0" "Log" 0 100 "ValueTime" "Gen" "TSRotorAngle" "" 3 0 "Upper" "Actual Deviation" "NO " "NO " "NO " 0 "NO " 0 "NO " 0 "NO " 0 "Default to Global Option" 0 0 "Never" 0 0 ""
+}
+
+//--------------------------------------------------------------------------------
+// THE FOLLOWING ARE THE TRANSIENT RESULT ANALYZER TIME WINDOWS
+//--------------------------------------------------------------------------------
+TSResultAnalysisTimeWindow (ViolMaxStore,CustomExpression:0,CustomExpression:1,ObjectType,Selected,
+   ModalIterations,TimeEnd,TimeStart,ObjectField,ModalStartField,ObjectFilter,
+   CalcField:0,ModalMaxHz,UndampMinHz,TimeMeaning,ModalDo,PlotName,
+   UndampDampPerc,CustomExpressionStr:0,CustomExpressionStr:1,ViolMaxDecrease,
+   ViolMaxIncrease,ViolMaxMin,ViolMaxDecreasePercent,ViolMaxIncreasePercent,
+   ViolMaxMinPercent,UndampMinRank,Name,Include,ModalStartObject,DataCheck:0,
+   DataCheckAggr:0,CalcFieldExtra:0)
+{
+100 "" "" "Bus" "NO " 20 10.000000 8.000000 "TSVpu" "" "" "" 5.000 0.0100 "Absolute" "NO " "" 5.000 "" "" 0.000 0.000 0.0100 0.000 0.000 0.000 5.000 "t>8, Bus Vpu (max-min) > 0.01" "YES" "" "" "" ""
+100 "" "" "Bus" "NO " 20 10.000000 8.000000 "TSVpu" "" "" "" 5.000 0.0100 "Delta" "YES" "" 3.000 "" "" 0.000 0.000 0.000 0.000 0.000 0.000 5.000 "t>8, Bus Vpu Damping < 3%" "YES" "" "" "" ""
+100 "" "" "Gen" "NO " 20 10.000000 8.000000 "TSRotorAngle" "" "" "" 5.000 0.0100 "Absolute" "NO " "" 5.000 "" "" 0.000 0.000 5.000 0.000 0.000 0.000 5.000 "t>8, Gen Angle (max-min) > 5" "YES" "" "" "" ""
+100 "" "" "Gen" "NO " 20 10.000000 8.000000 "TSRotorAngle" "" "" "" 5.000 0.0100 "Delta" "YES" "" 3.000 "" "" 0.000 0.000 0.000 0.000 0.000 0.000 5.000 "t>8, Gen Angle Damping < 3%" "YES" "" "" "" ""
+100 "" "" "Gen" "NO " 20 10.000000 8.000000 "TSMvar" "" "" "" 5.000 0.0100 "Absolute" "NO " "" 5.000 "" "" 0.000 0.000 0.000 0.000 0.000 1.000 5.000 "t>8, Gen MVAR (max-min) > 1%" "YES" "" "" "" ""
+100 "" "" "Gen" "NO " 20 10.000000 8.000000 "TSMW" "" "" "" 5.000 0.0100 "Absolute" "NO " "" 5.000 "" "" 0.000 0.000 0.000 0.000 0.000 1.000 5.000 "t>8, Gen MW (max-min) > 1%" "YES" "" "" "" ""
+}
+
+Script {
+   EnterMode(RUN);
+}

@@ -1,0 +1,39 @@
+Script {
+    EnterMode(EDIT);
+    
+    // Clear out old settings. 
+    TSClearResultsFromRAM(ALL); // If you see an access violation: Use the July 7, 2023 patch of v23 or later to resolve the issue.
+    Delete(TSContingency); 
+    Delete(TSPlot);
+    Delete(TSPlotSeries);
+    Delete(TSLimitMonitor);
+    Delete(TSResultAnalysisTimeWindow);
+    
+    // Load settings for this run. 
+    LoadAux("Settings_TS.aux",YES);
+    LoadAux("Settings_TS_Contingencies.aux",YES);
+    LoadAux("Settings_TS_Channels.aux",YES);
+    LoadAux("Settings_TS_Plots.aux",YES);
+    LoadAux("Settings_TS_Limit_Monitors.aux",YES);
+}
+
+Script {
+    // Save a log of dynamics errors from the original case.
+    EnterMode(RUN);
+    LoadAux("Save_TSValidation.aux")
+
+    // Auto correct & start running all contingencies. Save results when finished.   
+    TSAutoCorrect;
+    TSSolveAll(NO);
+    SaveCase("@CASENAME.pwb", PWB);
+    
+    // Analyze results which were saved on the HDD. Save results when finished.
+    TSRunResultAnalyzer(); 
+    SaveCase("@CASENAME.pwb", PWB);
+    
+    // Load all result events from result path - only necessary if result events have not been kept in RAM.
+    // LoadAuxDirectory("@CASEFILEPATH/@CASENAME/"); // @CASEFILEPATH/@CASENAME/ may not work with "LoadAuxDirectory" command.
+    LoadAux("Save_TS_Results.aux",YES);
+}
+
+
