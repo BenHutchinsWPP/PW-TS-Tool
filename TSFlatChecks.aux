@@ -1,0 +1,36 @@
+Script {
+    EnterMode(EDIT);
+    SetData(Contingency,[Skip],[YES],ALL);
+}
+
+Contingency (Name,Category,Skip,RemedialActionInclude,ScreenAllow,NormalRatingNoAction,Memo,
+   PostCTGAuxFile,SolutionOptionsUse,SolutionOptionsUseSpecific,
+   MonitorExceptionsUse,SolutionOptions,DataMaintainerAssign)
+{
+"P0 TS Logic Check" "P0" "NO " "YES" "NO " "NO " "" "none" "NO " "YES" "Use" "" ""
+}
+
+CTG_Options_Value (Option,Value)
+{
+"TSModelMaxDelay"                  "9999"
+}
+
+CTG_Options_Value (Option,Value)
+{
+"TSModelsTrip"                     "LHVRT,TIOCR1,LOCTI,TIOCRS,TIOCRSRF,DISTRELAY,DISTRELAYITR,MSC1,MSR1"
+"TSModelsMonitor"                  ""
+}
+
+Script {
+    // Check which transient stability models will activate.
+    // Save to a CSV.
+    EnterMode(RUN);
+    CTGSolveAll(NO,NO); // DoDistributed, ClearAllResults
+    SaveData("TSFlatChecks.csv", CSV, WhatOccurredDuringContingency,[Contingency,Applied,ObjectAction,Criteria,CriteriaStatus,Comment,WhatOccurredBrief,Origin,RemedialAction,WhatOccurred],[]);
+
+    // Apply the system state with those device activations. Save as a separate case.
+    CTGSolve("P0 TS Logic Check");
+    SaveCase("@CASENAME TSFlatCheck.pwb");
+}
+
+
